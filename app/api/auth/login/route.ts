@@ -1,14 +1,13 @@
 import { NextResponse } from "next/server";
 import {connectDB} from "@/lib/db";
+import {signToken} from "@/lib/jwt";
+import {cookies} from "next/headers";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
 import User from "@/models/User";
 import Otp from "@/models/Otp";
-
-import jwt from "jsonwebtoken";
-import {cookies} from "next/headers";
-
+import { sendOtpEmail } from "@/lib/mail";
 
 
 export async function POST(req:Request){
@@ -61,10 +60,24 @@ export async function POST(req:Request){
             expiresAt:new Date(Date.now()+5*60*1000),
         }) 
 
+        const token = signToken({
+                    userId: user._id,
+                    email: user.email,
+                });
+        
+                const cookie = await cookies();
+                cookie.set("token",token,{
+                    httpOnly:true, //js cant read this cookie
+                    secure: process.env.NODE_ENV === "production", //https only 
+                    sameSite: "strict", //Cookie sent only for same-site requests
+                    maxAge: 60*60*24,
+                    path: "/",
+                });
+        
+
+        
         return NextResponse.json(
-                {message:"OTP sent for verification",
-                otp,
-                },
+                {message:"Login successful"},
                 
             )
     }catch(error){
