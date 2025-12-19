@@ -2,6 +2,7 @@
 
 import {useState} from "react";
 import {useRouter} from "next/navigation";
+import { signIn } from "next-auth/react";
 
 
 export default function SignupPage(){
@@ -85,7 +86,9 @@ export default function SignupPage(){
                     {loading?"Signing up..." : "Signup"}
                 </button>
                 <br></br>
-                
+                <button onClick={()=>signIn("google")}>
+                    Continue with Google
+                </button>
 
             </form>
         </div>

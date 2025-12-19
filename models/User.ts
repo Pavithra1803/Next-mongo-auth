@@ -4,7 +4,6 @@ const UserSchema = new Schema(
     {
         name:{
             type:String,
-            required:true,
             trim:true,
         },
         email:{
@@ -16,9 +15,13 @@ const UserSchema = new Schema(
         },
         password:{
             type: String,
-            required: true,
             minlength:8,
             select:false //this field wil not be returned in queries by default
+        },
+        authProvider:{
+            type: String,
+            enum: ["local","google"],
+            default: "local"
         },
         role: {
             type: String,
