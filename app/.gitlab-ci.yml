@@ -1,0 +1,15 @@
+stages:
+  - install
+  - build
+
+install_dependencies:
+  stage: install
+  script:
+    - echo "Installing dependencies"
+    - npm install
+
+build_app:
+  stage: build
+  script:
+    - echo "Building Next.js app"
+    - npm run build
