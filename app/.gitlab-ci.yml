@@ -5,7 +5,7 @@ stages:
 install_dependencies:
   stage: install
   script:
-    - echo "Installing all dependencies"
+    - echo "Installing all the required dependencies"
     - npm install
 
 build_app:
