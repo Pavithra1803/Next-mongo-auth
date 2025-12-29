@@ -26,7 +26,7 @@ export default function LoginPage(){
   };
     return(
         <div>
-            <h1>Login</h1>
+            <h1 style={{textAlign:"center"}}>Login</h1>
             {error && <p style={{color:"red"}}>{error}</p>}
 
             <form >
