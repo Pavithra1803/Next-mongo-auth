@@ -5,11 +5,10 @@ stages:
 install_dependencies:
   stage: install
   script:
-    - echo "Installing all the required dependencies"
     - npm install
 
 build_app:
   stage: build
   script:
-    - echo "Building Next.js app"
+    - npm install
     - npm run build
