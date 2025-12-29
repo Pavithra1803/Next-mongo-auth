@@ -18,7 +18,6 @@ export default function OAuthCallbackPage() {
         }),
       });
 
-      // redirect to home after JWT is set
       window.location.href = "/";
     };
 

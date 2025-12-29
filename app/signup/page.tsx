@@ -86,8 +86,14 @@ export default function SignupPage(){
                     {loading?"Signing up..." : "Signup"}
                 </button>
                 <br></br>
+                <h1>OR</h1>
+                <br></br>
                 <button onClick={()=>signIn("google")}>
                     Continue with Google
+                </button>
+                <br></br>
+                <button onClick={()=>signIn("github")}>
+                    Continue with Github
                 </button>
 
             </form>

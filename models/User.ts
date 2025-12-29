@@ -20,7 +20,7 @@ const UserSchema = new Schema(
         },
         authProvider:{
             type: String,
-            enum: ["local","google"],
+            enum: ["local","google","github"],
             default: "local"
         },
         role: {

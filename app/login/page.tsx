@@ -2,72 +2,63 @@
 
 import { useState } from "react";
 import {useRouter} from "next/navigation";
+import {signIn} from "next-auth/react"
 
 export default function LoginPage(){
     const router = useRouter();
 
-    const [form,setForm]=useState({
-        email:"",
-        password:""
-    })
+    const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-    const [loading,setLoading] = useState(false);
-    const [error,setError] = useState("");
+  const handleLogin = async () => {
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
 
-    async function handleSubmit(e: React.FormEvent)
-     {
-        e.preventDefault();
-        setError("");
-        setLoading(true);
-
-        try{
-            const res=await fetch("/api/auth/login",{
-                method:"POST",
-                headers:{"Content-Type":"application/json"},
-                body:JSON.stringify({
-                    ...form
-                })
-            })
-
-            const data=await res.json();
-            
-            if(!res.ok){
-                throw new Error(data.message)
-            }
-
-            router.push(`/`)
-
-        }catch(error:any){
-            setError(error.message || "Login failed")
-        }finally{
-            setLoading(false);
-        }
+    if (res?.error) {
+      setError("Invalid email or password");
+    } else {
+      router.push("/dashboard");
     }
+  };
     return(
         <div>
             <h1>Login</h1>
             {error && <p style={{color:"red"}}>{error}</p>}
 
-            <form onSubmit={handleSubmit}>
+            <form >
                 
                  <input
                     placeholder="Email"
-                    value={form.email}
-                    onChange={(e)=>setForm({...form,email:e.target.value})}>
+                    value={email}
+                    onChange={(e)=>setEmail(e.target.value)}>
                 </input>
                 <br/>
                  <input
                     placeholder="Password"
                     type="password"
-                    value={form.password}
-                    onChange={(e)=>setForm({...form,password:e.target.value})}>
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}>
                 </input>
                 
                 <br/>
 
-                <button disabled={loading}>
-                    {loading?"Logging up..." : "Login"}
+                <button type="button" onClick={handleLogin}>Login</button>
+
+                {error && <p>{error}</p>}
+
+                <h1>OR</h1>
+                <br></br>
+                <button type="button" onClick={()=>signIn("google")}>
+                    Continue with Google
                 </button>
+                <br></br>
+                <button type="button" onClick={()=>signIn("github")}>
+                    Continue with Github
+                </button>                
 
             </form>
         </div>
