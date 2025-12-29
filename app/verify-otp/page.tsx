@@ -6,8 +6,13 @@ import { useState, useEffect } from "react";
 export default function VerifyOtpPage(){
 
     const router= useRouter();
+    const [email, setEmail] = useState<string | null>(null);
 
-    const email=sessionStorage.getItem("otpEmail") || "";
+    useEffect(()=>{
+        const email=sessionStorage.getItem("otpEmail") || "";
+        setEmail(email);
+    },[])
+
     const [otp, setOtp] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
