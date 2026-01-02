@@ -2,6 +2,7 @@ stages:
   - install
   - build
 
+
 install_dependencies:
   stage: install
   script:
@@ -12,3 +13,8 @@ build_app:
   script:
     - npm install
     - npm run build
+prod_job:
+  stage: build
+  tags: [prod]
+  script:
+    - echo "Building production assets..."
