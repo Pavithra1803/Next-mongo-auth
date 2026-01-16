@@ -23,4 +23,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ghcr.io/Pavithra1803/Next-mongo-auth:latest
+          tags: ghcr.io/Pavithra1803/next-mongo-auth:latest
