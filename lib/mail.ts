@@ -1,36 +1,44 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
+let transporter: nodemailer.Transporter | null = null;
+
+function getTransporter() {
+  // Reuse if already created
+  if (transporter) return transporter;
+
+  // If email is not configured, disable email safely
+  if (
+    !process.env.EMAIL_HOST ||
+    !process.env.EMAIL_PORT ||
+    !process.env.EMAIL_USER ||
+    !process.env.EMAIL_PASS
+  ) {
+    console.warn("Email not configured. Skipping email sending.");
+    return null;
+  }
+
+  transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: Number(process.env.EMAIL_PORT),
-    secure: process.env.EMAIL_SECURE === "true", 
+    secure: process.env.EMAIL_SECURE === "true",
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
-});
+  });
 
-console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "SET" : "NOT SET");
+  return transporter;
+}
 
+export async function sendOtpEmail(to: string, otp: string) {
+  const transporter = getTransporter();
 
-transporter.verify((error,success)=>{
-    if(error){
-        console.error("SMTP connection error: ",error);
-    }
-    else{
-        console.error("SMTP server is ready to send emails ");
-    }
-})
+  // ⛔ During build or when email is not configured
+  if (!transporter) return;
 
+  const subject = "Verify your account";
 
-export async function sendOtpEmail(
-    to:string,
-    otp:string,
-){
-    const subject= "Verify your account";
-
-    const html = `
+  const html = `
     <div style="font-family: Arial, sans-serif;">
       <h2>${subject}</h2>
       <p>Your OTP is:</p>
@@ -40,14 +48,14 @@ export async function sendOtpEmail(
     </div>
   `;
 
-    await transporter.sendMail({
-            from: process.env.EMAIL_FROM as string,
-            to,
-            subject,
-            html,
-        });
-    
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM as string,
+    to,
+    subject,
+    html,
+  });
 }
+
 
 
 

@@ -1,9 +1,13 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 import { connectDB } from "@/lib/db";
 import { signToken } from "@/lib/jwt";
 import User from "@/models/User";
+
+
 
 export async function POST(req: Request) {
   const { email } = await req.json();

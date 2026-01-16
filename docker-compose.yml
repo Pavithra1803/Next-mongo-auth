@@ -1,0 +1,8 @@
+
+services:
+  web:
+    image: ghcr.io/Pavithra1803/Next-mongo-auth:latest
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.local

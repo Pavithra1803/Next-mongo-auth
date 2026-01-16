@@ -40,9 +40,7 @@ export default function SignupPage(){
             if(!res.ok){
                 throw new Error(data.message);
             }
-            useEffect(()=>{
             sessionStorage.setItem("otpEmail",form.email);
-            },[])
             router.push(`/verify-otp`);
         }catch(err: any){
             setError(err.message ||"Signup failed")
